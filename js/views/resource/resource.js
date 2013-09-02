@@ -103,9 +103,10 @@ define(function(require){
             $(issues).text('Nothing assigned');
         }else{
             _.each(dataControl[user].issues,function(issue){
-                var clas = (!issue.estimateStatistic.statFieldValue.value)?'label-warning':'label-info';
+                var clas = (!issue.estimateStatistic.statFieldValue.value)?'label-warning':'label-default';
+                var text = (!issue.estimateStatistic.statFieldValue.value)?' | Estimate |':'Effort: ';
                 var est = (!issue.estimateStatistic.statFieldValue.value)?'':issue.estimateStatistic.statFieldValue.value;
-                var node = $('<h4><div class="issue label '+clas+'"><span>'+issue.key+' - Estimate: </span><span class="badge">'+est+'</span></div></h4>')
+                var node = $('<h4><div class="issue label '+clas+'"><span>'+issue.key+' - '+text+'</span><span class="badge badge-info">'+est+'</span></div></h4>')
                 $(issues).append(node)
             })
         }

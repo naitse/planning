@@ -43,7 +43,7 @@ define(function(require){
                     rapidBoard = data.rapidBoard;
                     initialize();
                     resource.renderUsers(people,rcont);
-                    
+                    adjustIssues();
                 })
                 this.rendered = true;
             }
@@ -100,11 +100,30 @@ define(function(require){
         unassignedIssues = _.filter(sprintIssues, function(obj){ if(!obj.assignee){ return obj;} });
         updateUnassignedBar();
         updateOveralBar();
+        $('.nav-stacked li.active a').click()
         var monitor = setTimeout(initialize(),15000);
 
     }
 
     function attachE(){
+        $('.nav-stacked a').click(function(e){
+            e.preventDefault()
+            $('.nav-stacked li').removeClass('active');
+            $(this).parents('li').addClass('active');
+        })
+
+        $('.nav-stacked a#total-issues').click(function(e){
+            e.preventDefault()
+            var content = setIssueContent(sprintIssues);
+            $('.issues-container').html(content);
+        })
+
+        $('.nav-stacked a#remaining-unassigned').click(function(e){
+            e.preventDefault()
+            var content = setIssueContent(unassignedIssues);
+            $('.issues-container').html(content);
+        })
+
     }
 
     function attachStyles(){
@@ -122,6 +141,22 @@ define(function(require){
 
     }
 
+    function setIssueContent(_array){
+
+        var issues = $('<div class="issues"></div>')
+
+        _.each(_array,function(issue){
+                var clas = (!issue.estimateStatistic.statFieldValue.value)?'label-warning':'label-default';
+                var text = (!issue.estimateStatistic.statFieldValue.value)?' | Estimate |':'Effort: ';
+                var est = (!issue.estimateStatistic.statFieldValue.value)?'':issue.estimateStatistic.statFieldValue.value;
+                var node = $('<div class="issue "><div class="grabber" style="background-color:'+issue.color+'"/><img src="' + issue.typeUrl + '" title="'+issue.typeName+'"></img> <img src="' + issue.priorityUrl+'" title="'+issue.priorityName+'"></img> <img src="'+issue.statusUrl+'"></img> <span>' + issue.key + ' </span><span> '+issue.summary+'</span></div>') //</span><span class="badge badge-info">'+est+'</span><
+                $(issues).append(node)
+            })
+
+        return issues;
+    }
+
+
     function persona(args){
         return {
             name:args.nombre,
@@ -130,6 +165,16 @@ define(function(require){
             issues:[]
         }
     }
+
+    $(window).resize(adjustIssues);
+
+    function adjustIssues(initial){
+        // initial = initial || 8;
+        var left = $('.tabs').width()
+        var parent = $('.tabs').parents('div').width()
+        $('.issues-container').css('width', parent - 248 );
+    }
+
 
     return MainView;
 
