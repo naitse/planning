@@ -22,47 +22,27 @@ left: 0;
 width: 100%;
 }
 
+.badge {
+    font-size: 16px !important;
+}
+
 
 </style>
 
 <div id="MainView" style="display:none">
     <div id="unassigned-load" class="well">
         <div class="remaining-issues">
-            <div id="remaining-unassigned" class="">Issues to assing: <span class='unassigned'></span> of <span class='total'></span></div>
-            <div class="progress">
+            <h3><div id="total-issues" class="label label-info">Total Issues: <div id="" class="badge total"></div></div></h3>
+            <h3><div id="overal-points-label" class="label label-info">Total points: <div id="overal-points" class="badge"></div></div></h3>
+            <h3><div id="remaining-unassigned" class="label label-info">Issues to assing: <div id="unassigned" class="badge unassigned"></div></div></h3>
+            <h3><div id="unoveral-points-label" class="label label-info">Un-assigned points: <div id="unoveral-points" class="badge"></div></div></h3>
+            <!-- <div id="remaining-unassigned" class="lable label-info"><span class='unassigned'></span> of <span class='total'></span></div> -->
+<!--             <div class="progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
                 </div>
-            </div>
+            </div> -->
         </div>
-        <div class="remaining-points">
-            <div id="remaining-unassigned" class="">Overal points: </div>
-            <div id="overal-points" class="">Overal points: </div>
-        </div>     
     </div>
     <div id="resources-load" class="well">
-<!--         <div id="" class="resource" resource-name="sebastian.gramano">
-        <div style="display:table">
-            <div class="avatar" style="background: url(https://www.mulesoft.org/jira/secure/useravatar?ownerId=sebastian.gramano&amp;avatarId=11733)">
-            </div>
-            <div class="progress progress-vertical progress-success">
-                <div class="bar progress-bar" style="width: 100%; height:70%;bottom: 0px;position: absolute;"></div>
-            </div>
-        </div>
-            <div class="info">
-                <div class="name">Sebastian Gramano</div>
-            </div>
-        </div>
-        <div id="" class="resource" resource-name="dario.carabajal">
-        <div style="display:table">
-            <div class="avatar" style="background: url(https://www.mulesoft.org/jira/secure/useravatar?ownerId=sebastian.gramano&amp;avatarId=11733)">
-            </div>
-            <div class="progress progress-vertical progress-success">
-                <div class="bar progress-bar" style="width: 100%; height:70%;bottom: 0px;position: absolute;"></div>
-            </div>
-        </div>
-            <div class="info">
-                <div class="name">Dario CArabajal</div>
-            </div>
-        </div> -->
     </div>
 </div>

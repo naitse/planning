@@ -17,7 +17,8 @@ define(function(require){
         'jlim',
         'farolfo',
         'diego.fernandez',
-        'fernando.federico'
+        'fernando.federico',
+        'steven.butt'
     ],
     rcont = '#resources-load',
     rapidBoard,
@@ -60,18 +61,25 @@ define(function(require){
     function updateUnassignedBar(){
         var width = (unassignedIssues.length * 100) / sprintIssues.length;
         $('#remaining-unassigned').find('.unassigned').text(unassignedIssues.length);
-        $('#remaining-unassigned').find('.total').text(sprintIssues.length);
-        $('.remaining-issues .progress-bar').css('width',width + '%');
+        $('#total-issues').find('.total').text(sprintIssues.length);
+        // $('.remaining-issues .progress-bar').css('width',width + '%');
     }
 
     function updateOveralBar(){
         var overal = 0;
+        var unoveral = 0;
         $(sprintIssues).each(function(){
             if (this.estimateStatistic.statFieldValue.value){
                 overal += this.estimateStatistic.statFieldValue.value
             }
         })
+        $(unassignedIssues).each(function(){
+            if (this.estimateStatistic.statFieldValue.value){
+                unoveral += this.estimateStatistic.statFieldValue.value
+            }
+        })
         $('#overal-points').text(overal);
+        $('#unoveral-points').text(unoveral);
     }
 
     function manageData(){

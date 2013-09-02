@@ -45,7 +45,7 @@ define(function(require){
         },
         updateBar:function(data){
             var puntos = (data.points * 100) / pointLimit ;
-            $('.resource[resource-name="'+data.name+'"]').find('.assigned').text('Assigned: ' + $(data.issues).size())
+            $('.resource[resource-name="'+data.name+'"]').find('.assigned').text('A ' + $(data.issues).size())
 
             if($(data.issues).size() > 0){
                 $('.resource[resource-name="'+data.name+'"]').find('.assigned').addClass('label-success');
@@ -53,9 +53,18 @@ define(function(require){
                 $('.resource[resource-name="'+data.name+'"]').find('.assigned').removeClass('label-success');
             }
 
+            var toes =toEstimate(data.name)
 
-            // $('.resource[resource-name="'+data.name+'"]').find('.points').text('Points: ' + data.points)
-            
+            $('.resource[resource-name="'+data.name+'"]').find('.noes').text('E ' + toes);
+
+            if(toes > 0){
+                $('.resource[resource-name="'+data.name+'"]').find('.noes').addClass('label-warning');
+            }else{
+                $('.resource[resource-name="'+data.name+'"]').find('.noes').removeClass('label-warning');
+            }
+
+
+
             if(puntos != $('.resource[resource-name="'+data.name+'"]').find('.progress-bar').attr('puntos')){
 
                 $('.resource[resource-name="'+data.name+'"]').find('.progress-bar').stop(true,true).animate({
@@ -64,21 +73,11 @@ define(function(require){
                     $(this).removeClass(function (index, css) {
                          return (css.match (/\bprogress-bar-\S+/g) || []).join(' ')
                      }).attr('puntos',puntos).find('span').text(data.points)// +" / "+pointLimit);
-
-                    // $('.resource[resource-name="'+data.name+'"]').find('.points').removeClass(function (index, css) {
-                    //      return (css.match (/\blabel-\S+/g) || []).join(' ')
-                    //  })
-
-
                     if(puntos < 85){
-                        // $('.resource[resource-name="'+data.name+'"]').find('.points').addClass('label-success')
                         $(this).addClass('progress-bar-success');
                     }else if(puntos >=85 && puntos <= 100){
-                        // $('.resource[resource-name="'+data.name+'"]').find('.points').addClass('label-warning')
-                        // $(this).removeClass('progress-bar-success');
                         $(this).addClass('progress-bar-warning');
                     }else if(puntos > 100){
-                        // $('.resource[resource-name="'+data.name+'"]').find('.points').addClass('label-danger')
                         $(this).addClass('progress-bar-danger');
                     }
                 })
@@ -104,12 +103,30 @@ define(function(require){
             $(issues).text('Nothing assigned');
         }else{
             _.each(dataControl[user].issues,function(issue){
-                var node = $('<div class="issue"><span>'+issue.key+' - </span><span>Estimate: '+issue.estimateStatistic.statFieldValue.value+'</span></div>')
+                var clas = (!issue.estimateStatistic.statFieldValue.value)?'label-warning':'label-info';
+                var est = (!issue.estimateStatistic.statFieldValue.value)?'':issue.estimateStatistic.statFieldValue.value;
+                var node = $('<h4><div class="issue label '+clas+'"><span>'+issue.key+' - Estimate: </span><span class="badge">'+est+'</span></div></h4>')
                 $(issues).append(node)
             })
         }
 
         return $(issues).wrap("<span></span>").parent().html();
+    }
+
+    function toEstimate(user){
+    var val = 0;
+       if(dataControl[user].issues.length == 0){
+            // $(issues).text('Nothing assigned');
+        }else{
+            _.each(dataControl[user].issues,function(issue){
+                if(!issue.estimateStatistic.statFieldValue.value){
+                    val += 1;
+                }
+            })
+        }
+
+        return val;
+
     }
 
     function asc_sort(a, b){
