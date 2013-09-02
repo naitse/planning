@@ -26,15 +26,68 @@ width: 100%;
     font-size: 16px !important;
 }
 
+.tabs {
+    width: 200px;
+    display: inline-block;
+    margin-right: 4px;
+    float: left;
+
+}
+
+.issues-container {
+    width:100%;
+    height:200px;
+    max-height:200px;
+    overflow: hidden;
+    overflow-y:auto; 
+    /*display: table-cell;*/
+    border-radius: 8px;
+    box-shadow: 0px 0px 11px -5px inset;
+    float: left;
+}
+
+.grabber {
+    background: url("https://www.mulesoft.org/jira/s/en_UK5fjq9a/734/13/6.1.6/_/download/resources/com.pyxis.greenhopper.jira:gh-rapid-common/images/rapid/ghx-grabber.png") repeat-y 3;
+    width: 8px;
+    height: 29px;
+    float:left;
+}
+.issues-container .issue {
+    border-bottom: 1px solid #d6d6d6;
+    border-right: 1px solid #d6d6d6;
+    background: white;
+    height: 29px;
+}
 
 </style>
 
 <div id="MainView" style="display:none">
     <div id="unassigned-load" class="well">
         <div class="remaining-issues">
-            <h3><div id="total-issues" class="label label-info">Total Issues: <div id="" class="badge total"></div></div></h3>
+    <div style=" display: table; width: 100%; ">
+        <div class="tabs">
+            <ul class="nav nav-pills nav-stacked">
+              <li class="active">
+                <a id="total-issues" >
+                  <span class="badge pull-right total">0</span>
+                  Total Issues: 
+                </a>
+              </li>
+                <li class="">
+                <a id="remaining-unassigned" >
+                  <span class="badge pull-right unassigned">0</span>
+                  Issues to assing:
+                </a>
+              </li>
+            </ul>
+        </div>
+        <div class="issues-container">
+        </div>
+    </div>
+
+            <!-- <h3><div id="total-issues" class="label label-info">Total Issues: <div id="" class="badge total"></div></div></h3> -->
             <h3><div id="overal-points-label" class="label label-info">Total points: <div id="overal-points" class="badge"></div></div></h3>
-            <h3><div id="remaining-unassigned" class="label label-info">Issues to assing: <div id="unassigned" class="badge unassigned"></div></div></h3>
+            <!-- <h3><div id="remaining-unassigned" class="label label-info">Issues to assing: <div id="unassigned" class="badge unassigned"></div></div></h3> -->
             <h3><div id="unoveral-points-label" class="label label-info">Un-assigned points: <div id="unoveral-points" class="badge"></div></div></h3>
             <!-- <div id="remaining-unassigned" class="lable label-info"><span class='unassigned'></span> of <span class='total'></span></div> -->
 <!--             <div class="progress">
