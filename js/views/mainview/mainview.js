@@ -56,6 +56,12 @@ define(function(require){
                 sprintIssues = jira.getBacklogIssues(data)
                 manageData()
            })
+           jira.getLastPoints(rapidBoard).done(function(data){
+                var data = data.content
+                $('#last-points').text(data.total);
+                $('#last-points-incompleted').text(data.incompleted).parents('.label').addClass(function(){return v = (parseInt(data.incompleted) > 0)?'label-warning':'label-info';});
+                $('#last-points-completed').text(data.completed);
+           })
     }
 
     function updateUnassignedBar(){

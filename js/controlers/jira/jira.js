@@ -1,7 +1,8 @@
 define(function(require){
 
     var $ = require('jquery'),
-    baseUrl = "http://planning.cloudhub.io/";
+    //baseUrl = "http://planning.cloudhub.io/";
+    baseUrl = "http://localhost:8081/";
 
     require('jquery.base64');
 
@@ -37,6 +38,14 @@ define(function(require){
                   url: baseUrl + 'getIssues?rapidBoard='+rapidBoard,
                   dataType: "json"
             });
+        },
+
+        getLastPoints:function(rapidBoard){
+            return   $.ajax({
+                  type:'GET',
+                  url: baseUrl + 'getLastPoints?rapidBoard=' + rapidBoard,
+                  dataType: "json"
+            }); 
         },
 
         getUserProfile:function(username){
