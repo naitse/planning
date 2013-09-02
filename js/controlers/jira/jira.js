@@ -1,7 +1,7 @@
 define(function(require){
 
     var $ = require('jquery'),
-    baseUrl = "http://localhost:8081/";
+    baseUrl = "http://planning.cloudhub.io/";
 
     require('jquery.base64');
 
