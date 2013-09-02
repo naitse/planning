@@ -6,6 +6,7 @@ define(function(require){
     _ = require('underscore'),
     jira = require('jira'),
     sprintIssues = [],
+    init = false,
     unassignedIssues = [],
     people = [
         'dario.carabajal',
@@ -55,13 +56,17 @@ define(function(require){
            jira.getData(rapidBoard).done(function(data){
                 sprintIssues = jira.getBacklogIssues(data)
                 manageData()
+                init = true
+                var monitor = setTimeout(function(){initialize()},2000);
            })
-           jira.getLastPoints(rapidBoard).done(function(data){
-                var data = data.content
-                $('#last-points').text(data.total);
-                $('#last-points-incompleted').text(data.incompleted).parents('.label').addClass(function(){return v = (parseInt(data.incompleted) > 0)?'label-warning':'label-info';});
-                $('#last-points-completed').text(data.completed);
-           })
+           if(init == false){
+               jira.getLastPoints(rapidBoard).done(function(data){
+                    var data = data.content
+                    $('#last-points').text(data.total);
+                    $('#last-points-incompleted').text(data.incompleted).parents('.label').addClass(function(){return v = (parseInt(data.incompleted) > 0)?'label-warning':'label-info';});
+                    $('#last-points-completed').text(data.completed);
+               })
+           }
     }
 
     function updateUnassignedBar(){
@@ -107,7 +112,6 @@ define(function(require){
         updateUnassignedBar();
         updateOveralBar();
         $('.nav-stacked li.active a').click()
-        var monitor = setTimeout(initialize(),15000);
 
     }
 
