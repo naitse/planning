@@ -24,7 +24,7 @@ define(function(require){
     rcont = '#resources-load',
     rapidBoard,
     resource = require('views/resource/resource');
-    dataControl = require('views/global/global');
+    dataControl = require('views/global/global').dataControl;
 
     $(people).each(function(){
         dataControl[this] = persona({nombre:this.toString(),assigned:0,points:0})

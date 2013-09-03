@@ -6,7 +6,7 @@ define(function(require){
     _ = require('underscore'),
     jira = require('jira');
 
-    var dataControl = require('views/global/global');
+    var dataControl = require('views/global/global').dataControl;
 
     require('bootstrap');
 
