@@ -1,6 +1,8 @@
 define(function(require){
 
-    var global = []
+    var global = {
+        dataControl : []
+    }
     return global;
 
 });

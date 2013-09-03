@@ -8,23 +8,11 @@ define(function(require){
     sprintIssues = [],
     init = false,
     unassignedIssues = [],
-    people = [
-        'dario.carabajal',
-        'sebastian.gramano',
-        'christopher.mordue',
-        'dmitry.spasibenko',
-        'konstantin.babushkin',
-        'yulia.savinkova',
-        'jlim',
-        'farolfo',
-        'diego.fernandez',
-        'fernando.federico',
-        'steven.butt'
-    ],
+    people =[],
     rcont = '#resources-load',
     rapidBoard,
     resource = require('views/resource/resource');
-    dataControl = require('views/global/global');
+    dataControl = require('views/global/global').dataControl;
 
     $(people).each(function(){
         dataControl[this] = persona({nombre:this.toString(),assigned:0,points:0})
@@ -41,7 +29,10 @@ define(function(require){
                 attachStyles();
                 attachE();
                 jira.getBoardConfig().done(function(data){
-                    rapidBoard = data.rapidBoard;
+                    rapidBoard = data[0].rapidBoard;
+                    $(data).each(function(){
+                        people.push(this.username);  
+                    })
                     initialize();
                     resource.renderUsers(people,rcont);
                     adjustIssues();
@@ -73,7 +64,6 @@ define(function(require){
         var width = (unassignedIssues.length * 100) / sprintIssues.length;
         $('#remaining-unassigned').find('.unassigned').text(unassignedIssues.length);
         $('#total-issues').find('.total').text(sprintIssues.length);
-        // $('.remaining-issues .progress-bar').css('width',width + '%');
     }
 
     function updateOveralBar(){
