@@ -6,7 +6,9 @@ define(function(require){
     _ = require('underscore'),
     jira = require('jira');
 
-    var dataControl = require('views/global/global').dataControl;
+    var global = require('views/global/global');
+
+    var dataControl =  global.dataControl;
 
     require('bootstrap');
 
@@ -23,12 +25,6 @@ define(function(require){
                         title:data.displayName,
                         trigger:'hover'
                     })
-                    // .hover(function(){
-                    //     $(this).find('.name').show();
-                    // },
-                    // function(){
-                    //     $(this).find('.name').hide();  
-                    // })
                     $(template).find('.name').text(data.displayName);
                     $(template).attr('resource-name',data.name);
                     $(template).find('.progress').popover({
@@ -103,15 +99,27 @@ define(function(require){
     function popContent(user){
         var issues = $('<div class="issues"></div>')
 
-        if(dataControl[user].issues.length == 0){
+        console.log(dataControl,user);
+
+        if(!dataControl[user].issues){
+            $(issues).text('Nothing assigned');
+        }else if(dataControl[user].issues.length == 0){
             $(issues).text('Nothing assigned');
         }else{
             _.each(dataControl[user].issues,function(issue){
+
                 var clas = (!issue.estimateStatistic.statFieldValue.value)?'label-warning':'label-default';
-                var text = (!issue.estimateStatistic.statFieldValue.value)?' | Estimate |':'Effort: ';
+                var text = (!issue.estimateStatistic.statFieldValue.value)?'<span class="label label-warning">Estimate</span>':'Effort: ';
                 var est = (!issue.estimateStatistic.statFieldValue.value)?'':issue.estimateStatistic.statFieldValue.value;
-                var node = $('<h4><div class="issue label '+clas+'"><span>'+issue.key+' - '+text+'</span><span class="badge badge-info">'+est+'</span></div></h4>')
+                var node = $('<div class="issue "><div class="grabber" style="background-color:'+issue.color+'"/><img src="' + issue.typeUrl + '" title="'+issue.typeName+'"></img> <img src="' + issue.priorityUrl+'" title="'+issue.priorityName+'"></img> <img src="'+issue.statusUrl+'"></img> <span>' + issue.key + ' - '+text+' </span> <span class="badge badge-info">'+est+'</span></div>') //</span><span class="badge badge-info">'+est+'</span><
                 $(issues).append(node)
+
+
+                // var clas = (!issue.estimateStatistic.statFieldValue.value)?'label-warning':'label-default';
+                // var text = (!issue.estimateStatistic.statFieldValue.value)?' | Estimate |':'Effort: ';
+                // var est = (!issue.estimateStatistic.statFieldValue.value)?'':issue.estimateStatistic.statFieldValue.value;
+                // var node = $('<h4><div class="issue label '+clas+'"><span>'+issue.key+' - '+text+'</span><span class="badge badge-info">'+est+'</span></div></h4>')
+                // $(issues).append(node)
             })
         }
 

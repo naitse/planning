@@ -12,11 +12,11 @@ define(function(require){
     rcont = '#resources-load',
     rapidBoard,
     resource = require('views/resource/resource');
-    dataControl = require('views/global/global').dataControl;
+    
 
-    $(people).each(function(){
-        dataControl[this] = persona({nombre:this.toString(),assigned:0,points:0})
-    })
+    var global = require('views/global/global');
+
+    var dataControl =  global.dataControl;
 
     var MainView = {
         moduleId: "MainView",
@@ -31,7 +31,8 @@ define(function(require){
                 jira.getBoardConfig().done(function(data){
                     rapidBoard = data[0].rapidBoard;
                     $(data).each(function(){
-                        people.push(this.username);  
+                        people.push(this.username);
+                        dataControl[this.username] = persona({nombre:this.username.toString(),assigned:0,points:0})  
                     })
                     initialize();
                     resource.renderUsers(people,rcont);
