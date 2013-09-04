@@ -19,12 +19,16 @@ define(function(require){
                 jira.getUserProfile(this).done(function(data){
                     var template = $(pretemplate);
                     var avatar = _.toArray(data.avatarUrls)[1]
-                    $(template).find('.avatar').attr('style', 'background: url('+avatar+')').hover(function(){
-                        $(this).find('.name').show();
-                    },
-                    function(){
-                        $(this).find('.name').hide();  
+                    $(template).find('.avatar').attr('style', 'background: url('+avatar+')').tooltip({
+                        title:data.displayName,
+                        trigger:'hover'
                     })
+                    // .hover(function(){
+                    //     $(this).find('.name').show();
+                    // },
+                    // function(){
+                    //     $(this).find('.name').hide();  
+                    // })
                     $(template).find('.name').text(data.displayName);
                     $(template).attr('resource-name',data.name);
                     $(template).find('.progress').popover({
