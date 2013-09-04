@@ -14,6 +14,40 @@ define(function(require){
 
     var pointLimit = 13;
 
+    // var revertDrop = false;
+
+
+    $.ajaxQ = (function(){
+      var id = 0, Q = {};
+
+      $(document).ajaxSend(function(e, jqx){
+        jqx._id = ++id;
+        Q[jqx._id] = jqx;
+      });
+      $(document).ajaxComplete(function(e, jqx){
+        delete Q[jqx._id];
+      });
+
+      return {
+        abortAll: function(){
+          var r = [];
+          $.each(Q, function(i, jqx){
+            r.push(jqx._id);
+            jqx.abort();
+          });
+          return r;
+        }
+      };
+
+    })();
+
+    $(document).keydown(function(e){
+      if( e.keyCode == 27 )
+        global.revertDrop = true;
+        $('.resource').removeClass('droppable');
+        $( '.ui-draggable-dragging' ).draggable( 'option',  'revert', true ).trigger( 'mouseup' );
+    })
+
     var Resource = {
 
         renderUsers:function(users,container){
@@ -36,12 +70,42 @@ define(function(require){
                     }).on('shown.bs.popover', function () {
                         var user = $(this).parents('.resource').attr('resource-name');
                         updatePop(user)
-                    })    
+                    })
+
+                    $(template).droppable({
+                        activate: function( event, ui ) {$(this).toggleClass('drop-active');},
+                        drop: function(event, ui) {
+                            $('.resource').toggleClass('drop-active').removeClass('drop-active-over');
+                            $('.issues-container').toggleClass('drop-active').removeClass('drop-active-over')
+                            var assignee = $(this).attr('resource-name');
+                            var issueKey = $(global.issueKey).attr('issueKey');
+                            if(global.revertDrop != true){
+                                jira.assignIssue(assignee, issueKey).done(function(){
+                                    global.dragging = false;
+                                    global.issueKey = null;
+                                }).fail(function(){
+                                    global.dragging = false;
+                                     $('.issues-container').removeClass('drop-active-over');
+                                    $('.resource').removeClass('drop-active-over');
+                                    $(this).removeClass('drop-active-over')
+                                })
+                            }else{
+                                 $('.issues-container').removeClass('drop-active-over');
+                                    $('.resource').removeClass('drop-active-over');
+                                    $(this).removeClass('drop-active-over')
+                                    global.dragging = false;
+                            }
+                        },
+                        over: function( event, ui ) {
+                            $('.issues-container').removeClass('drop-active-over');
+                            $('.resource').removeClass('drop-active-over');
+                            $(this).addClass('drop-active-over')
+                        }
+                    })
                     $(container).append(template);
                     $(container).find('.resource').sort(asc_sort).appendTo(container);
                 })
             })
-
         },
         updateBar:function(data){
             var puntos = (data.points * 100) / pointLimit ;
@@ -86,6 +150,21 @@ define(function(require){
             if($('.resource[resource-name="'+data.name+'"]').find('.popover').size() > 0){
                 updatePop(data.name);
             }
+
+            $('.issue').draggable({
+                start: function( event, ui ) {
+                    $.ajaxQ.abortAll();
+                    global.revertDrop = false;
+                    global.dragging = true;
+                    global.issueKey = this;
+
+                },
+                stop: function( event, ui ) {
+                    if(global.revertDrop != true){
+                        $(this).remove();
+                    }
+                }
+            })
         }
     };
 
@@ -99,8 +178,6 @@ define(function(require){
     function popContent(user){
         var issues = $('<div class="issues"></div>')
 
-        console.log(dataControl,user);
-
         if(!dataControl[user].issues){
             $(issues).text('Nothing assigned');
         }else if(dataControl[user].issues.length == 0){
@@ -111,15 +188,9 @@ define(function(require){
                 var clas = (!issue.estimateStatistic.statFieldValue.value)?'label-warning':'label-default';
                 var text = (!issue.estimateStatistic.statFieldValue.value)?'<span class="label label-warning">Estimate</span>':'Effort: ';
                 var est = (!issue.estimateStatistic.statFieldValue.value)?'':issue.estimateStatistic.statFieldValue.value;
-                var node = $('<div class="issue "><div class="grabber" style="background-color:'+issue.color+'"/><img src="' + issue.typeUrl + '" title="'+issue.typeName+'"></img> <img src="' + issue.priorityUrl+'" title="'+issue.priorityName+'"></img> <img src="'+issue.statusUrl+'"></img> <span>' + issue.key + ' - '+text+' </span> <span class="badge badge-info">'+est+'</span></div>') //</span><span class="badge badge-info">'+est+'</span><
+                var node = $('<div class="issue " issueKey="'+issue.key+'"><div class="grabber" style="background-color:'+issue.color+'"/><img src="' + issue.typeUrl + '" title="'+issue.typeName+'"></img> <img src="' + issue.priorityUrl+'" title="'+issue.priorityName+'"></img> <img src="'+issue.statusUrl+'"></img> <span>' + issue.key + ' - '+text+' </span> <span class="badge badge-info">'+est+'</span></div>') //</span><span class="badge badge-info">'+est+'</span><
                 $(issues).append(node)
 
-
-                // var clas = (!issue.estimateStatistic.statFieldValue.value)?'label-warning':'label-default';
-                // var text = (!issue.estimateStatistic.statFieldValue.value)?' | Estimate |':'Effort: ';
-                // var est = (!issue.estimateStatistic.statFieldValue.value)?'':issue.estimateStatistic.statFieldValue.value;
-                // var node = $('<h4><div class="issue label '+clas+'"><span>'+issue.key+' - '+text+'</span><span class="badge badge-info">'+est+'</span></div></h4>')
-                // $(issues).append(node)
             })
         }
 
@@ -147,6 +218,7 @@ define(function(require){
     }
 
     function attachStyles(){
+
         loaded= false;
         $('style').each(function(){
             if($(this).attr('sof') == "resource"){

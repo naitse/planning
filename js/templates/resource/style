@@ -54,6 +54,14 @@ border-radius: 7px;
 box-shadow: 0px 0px 11px -5px inset;
 }
 
+.drop-active {
+	box-shadow: 0px 0px 11px -3px blue inset !important;
+}
+
+.drop-active-over {
+	box-shadow: 0px 0px 11px -3px green inset !important;
+}
+
 .resource .info {
 	position: relative;
 top: 4px;
