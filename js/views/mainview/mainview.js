@@ -45,11 +45,14 @@ define(function(require){
     };
 
     function initialize(){
+            complete = false
            jira.getData(rapidBoard).done(function(data){
                 sprintIssues = jira.getBacklogIssues(data)
                 manageData()
                 init = true
-                var monitor = setTimeout(function(){initialize()},2000);
+                monitoring();
+           }).fail(function(){
+                monitoring();
            })
            if(init == false){
                jira.getLastPoints(rapidBoard).done(function(data){
@@ -59,6 +62,17 @@ define(function(require){
                     $('#last-points-completed').text(data.completed);
                })
            }
+    }
+
+    function monitoring(){
+        var monitor = setTimeout(function(){
+            if(global.dragging == false ){
+                initialize()
+            }else{
+                monitoring()  
+            }
+
+        },2000);
     }
 
     function updateUnassignedBar(){
@@ -107,6 +121,37 @@ define(function(require){
     }
 
     function attachE(){
+        $('.issues-container').droppable({
+            activate: function( event, ui ) {$(this).toggleClass('drop-active');},
+            drop: function(event, ui) {
+                $('.resource').toggleClass('drop-active').removeClass('drop-active-over');
+                $('.issues-container').toggleClass('drop-active').removeClass('drop-active-over');
+                var assignee = '-1';
+                var issueKey = $(global.issueKey).attr('issueKey');
+                if(global.revertDrop != true){
+                    jira.assignIssue(assignee, issueKey).done(function(){
+                        global.dragging = false;
+                        global.issueKey = null;
+                    }).fail(function(){
+                        $('.issues-container').removeClass('drop-active-over')
+                        $('.resource').removeClass('drop-active-over');
+                        $(this).removeClass('drop-active-over')
+                        global.dragging = false;
+                    })
+                }else{
+                        $('.issues-container').removeClass('drop-active-over')
+                        $('.resource').removeClass('drop-active-over');
+                        $(this).removeClass('drop-active-over')
+                        global.dragging = false;
+                }
+            },
+            over: function( event, ui ) {
+                $('.issues-container').removeClass('drop-active-over')
+                $('.resource').removeClass('drop-active-over');
+                $(this).addClass('drop-active-over')
+           }
+        });
+
         $('.nav-stacked a').click(function(e){
             e.preventDefault()
             $('.nav-stacked li').removeClass('active');
@@ -150,7 +195,21 @@ define(function(require){
                 var clas = (!issue.estimateStatistic.statFieldValue.value)?'label-warning':'label-default';
                 var text = (!issue.estimateStatistic.statFieldValue.value)?' | Estimate |':'Effort: ';
                 var est = (!issue.estimateStatistic.statFieldValue.value)?'':issue.estimateStatistic.statFieldValue.value;
-                var node = $('<div class="issue "><div class="grabber" style="background-color:'+issue.color+'"/><img src="' + issue.typeUrl + '" title="'+issue.typeName+'"></img> <img src="' + issue.priorityUrl+'" title="'+issue.priorityName+'"></img> <img src="'+issue.statusUrl+'"></img> <span>' + issue.key + ' </span><span> '+issue.summary+'</span></div>') //</span><span class="badge badge-info">'+est+'</span><
+                var node = $('<div class="issue " issueKey="'+issue.key+'"><div class="grabber" style="background-color:'+issue.color+'"/><img src="' + issue.typeUrl + '" title="'+issue.typeName+'"></img> <img src="' + issue.priorityUrl+'" title="'+issue.priorityName+'"></img> <img src="'+issue.statusUrl+'"></img> <span>' + issue.key + ' </span><span> '+issue.summary+'</span></div>') //</span><span class="badge badge-info">'+est+'</span><
+                node.draggable({
+                start: function( event, ui ) {
+                    $.ajaxQ.abortAll();
+                    global.revertDrop = false;
+                    global.dragging = true;
+                    global.issueKey = this;
+
+                },
+                stop: function( event, ui ) {
+                    if(global.revertDrop != true){
+                        $(this).remove();
+                    }
+                }
+            })
                 $(issues).append(node)
             })
 

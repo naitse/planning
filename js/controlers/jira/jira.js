@@ -16,6 +16,14 @@ define(function(require){
             return baseUrl.replace('{id}',this._rapidBoardId);
         },
 
+        assignIssue:function(assignee, jiraKey){
+            return   $.ajax({
+                  type:'PUT',
+                  url: baseUrl + 'updateAssignee?assignee='+assignee + '&issueKey='+jiraKey,
+                  dataType: "json"
+            });
+        },
+
         getBoardUsers:function(){
             return   $.ajax({
                   type:'GET',
