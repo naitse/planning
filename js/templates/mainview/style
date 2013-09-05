@@ -55,7 +55,11 @@ width: 100%;
     border-right: 1px solid #d6d6d6;
     background: white;
     height: 29px;
-    cursor:pointer;
+    cursor:default;
+}
+
+.issue .grabber {
+	cursor:move;
 }
 .markers {
     height: 40px;

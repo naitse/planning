@@ -195,18 +195,29 @@ define(function(require){
                 var clas = (!issue.estimateStatistic.statFieldValue.value)?'label-warning':'label-default';
                 var text = (!issue.estimateStatistic.statFieldValue.value)?' | Estimate |':'Effort: ';
                 var est = (!issue.estimateStatistic.statFieldValue.value)?'':issue.estimateStatistic.statFieldValue.value;
-                var node = $('<div class="issue " issueKey="'+issue.key+'"><div class="grabber" style="background-color:'+issue.color+'"/><img src="' + issue.typeUrl + '" title="'+issue.typeName+'"></img> <img src="' + issue.priorityUrl+'" title="'+issue.priorityName+'"></img> <img src="'+issue.statusUrl+'"></img> <span>' + issue.key + ' </span><span> '+issue.summary+'</span></div>') //</span><span class="badge badge-info">'+est+'</span><
+                var node = $('<div class="issue " issueKey="'+issue.key+'"><div class="grabber" style="background-color:'+issue.color+'"/><img src="' + issue.typeUrl + '" title="'+issue.typeName+'"></img> <img src="' + issue.priorityUrl+'" title="'+issue.priorityName+'"></img> <img src="'+issue.statusUrl+'"></img> <span>' + issue.key + ' </span><span class="summary"> '+issue.summary+'</span></div>') //</span><span class="badge badge-info">'+est+'</span><
                 node.draggable({
+                handle: '.grabber',
                 start: function( event, ui ) {
                     $.ajaxQ.abortAll();
                     global.revertDrop = false;
                     global.dragging = true;
                     global.issueKey = this;
+                    $(this).find('.summary').hide().parents('.issue')
+                    .css({
+                        width:150,
+                        overflow:'hidden'
+                    })
 
                 },
                 stop: function( event, ui ) {
                     if(global.revertDrop != true){
                         $(this).remove();
+                    }else{
+                        $(this).find('.summary').show().parents('.issue').css({
+                            width:'100%',
+                            overflow:'hidden'
+                         })
                     }
                 }
             })
