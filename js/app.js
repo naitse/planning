@@ -47,6 +47,7 @@ define([
 
             var AppRouter = Backbone.Router.extend({
                 routes: {
+                    "book/:flag":"book",
                     "*actions": "defaultRoute"
                 }
             });
@@ -57,6 +58,10 @@ define([
 
             app_router.on('route:defaultRoute', function(actions) {
                 loadModule(MainView);
+            });
+
+            app_router.on('route:book', function(flag) {
+                loadModule(MainView,flag);
             });
 
             Backbone.history.start();

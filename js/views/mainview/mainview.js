@@ -3,6 +3,7 @@ define(function(require){
     var $ = require('jquery'),
     syncTemplate = require('text!templates/mainview/mainview.html'),
     styles = require('text!templates/mainview/style'),
+    stylesb = require('text!templates/mainview/styleb'),
     _ = require('underscore'),
     jira = require('jira'),
     sprintIssues = [],
@@ -23,9 +24,26 @@ define(function(require){
 
         rendered: false,
 
-        render: function(){
+        render: function(book){
+            console.log(book)
             if(!this.rendered){
+
                 $("#pannel-wrapper").append(syncTemplate);
+                
+                if (typeof book != 'undefined'){
+                    attachStyles('b');
+                    global.styles = 'b';
+                    resource.attachStyles(global.styles);
+                    $('.page-header').remove();
+                    var close = $('<div class="closeBook"><i class="glyphicon glyphicon-remove"></i></div>').click(function(){
+                        $('iframe', window.parent.document).hide()
+                    })
+                    $('body').append(close)
+                }else{
+                    attachStyles('');
+                    global.styles = '';
+                }
+
                 attachStyles();
                 attachE();
                 jira.getBoardConfig().done(function(data){
@@ -172,7 +190,7 @@ define(function(require){
 
     }
 
-    function attachStyles(){
+    function attachStyles(type){
         loaded= false;
         
         $('style').each(function(){
@@ -181,7 +199,10 @@ define(function(require){
             }
         })
         if(!loaded){
-            $('body').append($(styles));
+
+            var style = (type == 'b')?stylesb:styles;
+
+            $('body').append($(style));
         }
         
 

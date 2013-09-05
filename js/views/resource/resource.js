@@ -3,6 +3,7 @@ define(function(require){
     var $ = require('jquery'),
     pretemplate = require('text!templates/resource/resource.html'),
     styles = require('text!templates/resource/style'),
+    stylesb = require('text!templates/resource/styleb'),
     _ = require('underscore'),
     jira = require('jira');
 
@@ -49,6 +50,25 @@ define(function(require){
     })
 
     var Resource = {
+        attachStyles:function(type){
+
+        loaded= false;
+        $('style').each(function(){
+            if($(this).attr('sof') == "resource"){
+                loaded = true;
+            }
+        })
+        if(type == 'b'){
+            $('[sof="resource"]').remove()
+            loaded = false
+        }
+
+        if(!loaded){
+           var style = (type == 'b')?stylesb:styles;
+
+            $('body').append($(style));
+        }
+    },
 
         renderUsers:function(users,container){
             $(users).each(function(){
@@ -217,7 +237,7 @@ define(function(require){
         return ($(b).attr('resource-name')) < ($(a).attr('resource-name')) ? 1 : -1;    
     }
 
-    function attachStyles(){
+    function attachStyles(type){
 
         loaded= false;
         $('style').each(function(){
@@ -225,12 +245,20 @@ define(function(require){
                 loaded = true;
             }
         })
+        if(type == 'b'){
+            $('[sof="resource"]').remove()
+            loaded = false
+        }
+
         if(!loaded){
-            $('body').append($(styles));
+           var style = (type == 'b')?stylesb:styles;
+
+            $('body').append($(style));
         }
     }
 
-    attachStyles()
+    attachStyles(global.styles);
+
     return Resource;
 
 });
