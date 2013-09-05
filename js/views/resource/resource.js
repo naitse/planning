@@ -152,12 +152,12 @@ define(function(require){
             }
 
             $('.issue').draggable({
+                handle: '.grabber',
                 start: function( event, ui ) {
                     $.ajaxQ.abortAll();
                     global.revertDrop = false;
                     global.dragging = true;
                     global.issueKey = this;
-
                 },
                 stop: function( event, ui ) {
                     if(global.revertDrop != true){
