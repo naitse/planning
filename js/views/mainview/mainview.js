@@ -53,7 +53,7 @@ define(function(require){
                         dataControl[this.username] = persona({nombre:this.username.toString(),assigned:0,points:0})  
                     })
                     initialize();
-                    resource.renderUsers(people,rcont);
+                    resource.renderUsers(people,rcont,adjustIssues);
                     adjustIssues();
                 })
                 this.rendered = true;
@@ -264,7 +264,13 @@ define(function(require){
         // initial = initial || 8;
         var left = $('.tabs').width()
         var parent = $('.tabs').parents('div').width()
-        $('.issues-container').css('width', parent - 248 );
+        if (global.styles == ''){
+            $('.issues-container').css('width', parent - 248 );
+        }else{
+            var pa = $('#resources-load').width()
+            var inner = $('.resource').size() * 70
+            $('.issues-container').css('width', pa - inner );
+        }
     }
 
 

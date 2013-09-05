@@ -70,7 +70,7 @@ define(function(require){
         }
     },
 
-        renderUsers:function(users,container){
+        renderUsers:function(users,container,callBack){
             $(users).each(function(){
                 jira.getUserProfile(this).done(function(data){
                     var template = $(pretemplate);
@@ -124,8 +124,10 @@ define(function(require){
                     })
                     $(container).append(template);
                     $(container).find('.resource').sort(asc_sort).appendTo(container);
+                    callBack();
                 })
             })
+            
         },
         updateBar:function(data){
             var puntos = (data.points * 100) / pointLimit ;
