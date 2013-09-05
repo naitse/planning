@@ -4,7 +4,8 @@ define(function(require){
         dataControl : [],
         dragging : false,
         issueKey:null,
-        revertDrop:false
+        revertDrop:false,
+        styles:''
     }
     return global;
 
