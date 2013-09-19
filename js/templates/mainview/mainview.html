@@ -1,39 +1,44 @@
 <div id="MainView" style="display:none">
-    <div class="markers">
-        <h4><div id="overal-points-label" class="label label-info">Current points <div id="overal-points" class="badge"></div></div></h4>
-        <h4><div id="unoveral-points-label" class="label label-info">Un-assigned points <div id="unoveral-points" class="badge"></div></div></h4>
-        <div class="last-sprint" style=" float: right; ">
-            <div style="float:left; margin-right:8px;text-shadow: 2px 2px 3px rgba(150, 150, 150, 0.7);">Last Sprint points <i class="glyphicon glyphicon-arrow-right"></i></div>
-            <div id="overal-points-label" class="label label-info">Total <div id="last-points" class="badge">0</div></div>
-            <div id="overal-points-lab" class="label label-info">Incomplete <div id="last-points-incompleted" class="badge">0</div></div>
-            <div id="overal-points-" class="label label-info">Complete <div id="last-points-completed" class="badge">0</div></div>
-        </div>    
+    <div id="frame">
+        <div class="refresh-iframe"><i class="glyphicon glyphicon-refresh"></i></div>
+        <iframe src="" frameBorder="0" style="width:100%; height:100%;"/>
     </div>
-        <div id="resources-load" class="well">
-    </div>
-    <div id="unassigned-load" class="well">
-        <div class="remaining-issues">
-    <div style=" display: table; width: 100%; ">
-        <div class="tabs">
-            <ul class="nav nav-pills nav-stacked">
-            <li id="tab-assign" class="active">
-                <a id="remaining-unassigned" >
-                  <span class="badge pull-right unassigned">0</span>
-                  Issues to assing:
-                </a>
-              </li>
-              <li class="">
-                <a id="total-issues" >
-                  <span class="badge pull-right total">0</span>
-                  Total Issues: 
-                </a>
-              </li>
-            </ul>
+    <div id="content-wrapper">
+        <div class="markers">
+            <h4><div id="overal-points-label" class="label label-info">Current points <div id="overal-points" class="badge"></div></div></h4>
+            <h4><div id="unoveral-points-label" class="label label-info">Un-assigned points <div id="unoveral-points" class="badge"></div></div></h4>
+            <div class="last-sprint" style=" float: right; ">
+                <div style="float:left; margin-right:8px;text-shadow: 2px 2px 3px rgba(150, 150, 150, 0.7);">Last Sprint points <i class="glyphicon glyphicon-arrow-right"></i></div>
+                <div id="overal-points-label" class="label label-info">Total <div id="last-points" class="badge">0</div></div>
+                <div id="overal-points-lab" class="label label-info">Incomplete <div id="last-points-incompleted" class="badge">0</div></div>
+                <div id="overal-points-" class="label label-info">Complete <div id="last-points-completed" class="badge">0</div></div>
+            </div>    
         </div>
-        <div class="issues-container">
+            <div id="resources-load" class="well">
+        </div>
+        <div id="unassigned-load" class="well">
+            <div class="remaining-issues">
+        <div style=" display: table; width: 100%; ">
+            <div class="tabs">
+                <ul class="nav nav-pills nav-stacked">
+                <li id="tab-assign" class="active">
+                    <a id="remaining-unassigned" >
+                      <span class="badge pull-right unassigned">0</span>
+                      Issues to assing:
+                    </a>
+                  </li>
+                  <li class="">
+                    <a id="total-issues" >
+                      <span class="badge pull-right total">0</span>
+                      Total Issues: 
+                    </a>
+                  </li>
+                </ul>
+            </div>
+            <div class="issues-container">
+            </div>
+        </div>
+            </div>
         </div>
     </div>
-        </div>
-    </div>
-
 </div>

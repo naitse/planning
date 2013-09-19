@@ -82,4 +82,8 @@ margin-right: 10px;
     color:#555;
     background: #fff;
 }
+
+#frame {
+    display:none;
+}
 </style>
