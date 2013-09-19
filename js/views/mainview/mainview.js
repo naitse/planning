@@ -35,10 +35,12 @@ define(function(require){
                     global.styles = 'b';
                     resource.attachStyles(global.styles);
                     $('.page-header').remove();
-                    var close = $('<div class="closeBook"><i class="glyphicon glyphicon-remove"></i></div>').click(function(){
-                        $('iframe', window.parent.document).hide()
-                    })
-                    $('body').append(close)
+                    $('iframe').attr('src','https://www.mulesoft.org/jira/secure/RapidBoard.jspa?rapidView=53&view=planning');
+                    // adjustBook();
+                    // var close = $('<div class="closeBook"><i class="glyphicon glyphicon-remove"></i></div>').click(function(){
+                    //     $('iframe', window.parent.document).hide()
+                    // })
+                    // $('body').append(close)
                 }else{
                     attachStyles('');
                     global.styles = '';
@@ -188,6 +190,11 @@ define(function(require){
             $('.issues-container').html(content);
         })
 
+
+        $('.refresh-iframe').click(function(){
+            $('iframe').attr('src',$('iframe').attr('src'))
+        })
+
     }
 
     function attachStyles(type){
@@ -259,6 +266,8 @@ define(function(require){
     }
 
     $(window).resize(adjustIssues);
+
+
 
     function adjustIssues(initial){
         // initial = initial || 8;

@@ -42,8 +42,8 @@ width: 100%;
     border-radius: 8px;
     box-shadow: 0px 0px 11px -5px inset;
     position: fixed;
-top: 108;
-right: 21px;
+bottom: 5;
+right: 9px;
 min-width: 200px;
 }
 
@@ -67,6 +67,8 @@ min-width: 200px;
 }
 .markers {
     height: 40px;
+        top: 27px;
+    position: relative;
 }
 .markers .label {
 display: inline-block !important;
@@ -85,6 +87,7 @@ margin-right: 10px;
 .markers .badge {
     color:#555;
     background: #fff;
+
 }
 .closeBook {
     position:fixed;
@@ -94,7 +97,7 @@ margin-right: 10px;
 
 #tab-assign {
     position: fixed;
-top: 72px;
+bottom: 197px;
 right: 21px;
 }
 
@@ -105,6 +108,25 @@ left: -400px;
 
 body {
     overflow:hidden;
+}
+
+#frame {
+    display:block;
+}
+
+#content-wrapper {
+    position:fixed;
+    bottom:-38px;
+    width: 100%;
+}
+
+.refresh-iframe {
+    position: fixed;
+background: skyblue;
+padding: 13px;
+border-radius: 40px;
+border: 1px solid black;
+cursor:pointer
 }
 
 </style>
